@@ -26,27 +26,35 @@ function LiveComponents({ fragment }) {
 }
 
 function Slots({ fragment }) {
-  const [side, setSide] = useState(false)
-  const onClick = () => setSide((a) => !a)
-  const slotRef = useRef()
+  const [side, setSide] = useState([0,0])
+  const onClick = () => {
+    // pick a random receptacle to display the `fragment` in
+    setSide(([_i, _j]) => {
+      let i, j
+      do {
+        i = Math.floor(Math.random() * 3)
+        j = Math.floor(Math.random() * 2)
+      } while (i === _i && j === _j)
+      return [i, j]
+    })
+  }
   return (
     <>
       <button onClick={onClick}>
-        {!side && '←'} switch {side && '→'}
+        move somewhere else in DOM
       </button>
       <ul className="grid">
-        <li ref={slotRef}>
-          <Receptacle
-            slot={slotRef} // into ref Node
-            fragment={side && fragment}
-            props={{ label: 'left' }}
-          />
-        </li>
-        <Receptacle
-          type="li" // as standalone Node
-          fragment={!side && fragment}
-          props={{ label: 'right' }}
-        />
+        {/* make many receptacles */}
+        {[0, 1, 2].map((i) => (
+          [0, 1].map((j) => (
+            <li key={i + '-' + j}>
+              <Receptacle
+                fragment={side[0] === i && side[1] === j && fragment}
+                props={{ label: `${i}x${j}` }}
+              />
+            </li>
+          ))
+        ))}
       </ul>
     </>
   )
@@ -58,7 +66,7 @@ function Video({ label }) {
     <>
       <video width="320" height="240" controls loop muted autoPlay playsInline>
         <source
-          src="https://www.w3docs.com/build/videos/arcnet.io(7-sec).mp4"
+          src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
           type="video/mp4"
         />
       </video>

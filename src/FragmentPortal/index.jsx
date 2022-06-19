@@ -10,6 +10,9 @@ import {
 import { createPortal } from 'react-dom'
 
 const fragments = document.createDocumentFragment()
+const getProps = Symbol()
+const setProps = Symbol()
+const currentProps = Symbol()
 
 export function useFragment(type = 'div') {
   const [fragment] = useState(() => {
@@ -17,12 +20,14 @@ export function useFragment(type = 'div') {
     fragments.appendChild(element)
     return element
   })
+
   useEffect(
     () => () => {
       fragment.parentElement?.removeChild(fragment)
     },
     [fragment],
   )
+
   return fragment
 }
 
@@ -40,13 +45,14 @@ export function Receptacle({ fragment, props, type = 'div', slot }) {
     }
   }, [slot, fragment])
 
-  fragment.getProps = () => props
   useLayoutEffect(() => {
-    if (!fragment || fragment.currentProps() === props) return
-    fragment.setProps(props)
+    if (!fragment || fragment[currentProps]() === props) return
+    fragment[setProps]?.(props)
   }, [fragment, props])
 
   if (!fragment) return null
+
+  fragment[getProps] = () => props
 
   if (slot) return null
 
@@ -55,9 +61,9 @@ export function Receptacle({ fragment, props, type = 'div', slot }) {
 }
 
 export function Portal({ children, fragment }) {
-  const [extraProps, setExtraProps] = useState(fragment.getProps?.() || {})
-  fragment.setProps = setExtraProps
-  fragment.currentProps = () => extraProps
+  const [extraProps, setExtraProps] = useState(fragment[getProps]?.() || {})
+  fragment[setProps] = setExtraProps
+  fragment[currentProps] = () => extraProps
   return createPortal(
     Children.map(children, (child) => {
       if (!isValidElement(child)) return child
