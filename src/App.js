@@ -32,8 +32,8 @@ function Slots({ fragment }) {
     setSide(([_i, _j]) => {
       let i, j
       do {
-        i = Math.floor(Math.random() * 3)
-        j = Math.floor(Math.random() * 2)
+        i = Math.floor(Math.random() * 2)
+        j = Math.floor(Math.random() * 3)
       } while (i === _i && j === _j)
       return [i, j]
     })
@@ -45,12 +45,12 @@ function Slots({ fragment }) {
       </button>
       <ul className="grid">
         {/* make many receptacles */}
-        {[0, 1, 2].map((i) => (
-          [0, 1].map((j) => (
+        {[0, 1].map((i) => (
+          [0, 1, 2].map((j) => (
             <li key={i + '-' + j}>
               <Receptacle
                 fragment={side[0] === i && side[1] === j && fragment}
-                props={{ label: `${i}x${j}` }}
+                props={{ label: `${j+1}x${i+1}` }}
               />
             </li>
           ))
