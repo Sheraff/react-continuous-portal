@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-continuous-portal/static/css/main.43984ba5.css",
+    "main.js": "/react-continuous-portal/static/js/main.824cad9b.js",
+    "index.html": "/react-continuous-portal/index.html",
+    "main.43984ba5.css.map": "/react-continuous-portal/static/css/main.43984ba5.css.map",
+    "main.824cad9b.js.map": "/react-continuous-portal/static/js/main.824cad9b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.43984ba5.css",
+    "static/js/main.824cad9b.js"
+  ]
+}
